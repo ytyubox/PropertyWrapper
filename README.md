@@ -2,7 +2,7 @@
 
 透過觀察來理解這要怎麼用，並列舉一些跟一般 property 的異同，看看有什麼有趣的實作。
 
-[![](speakdeck.jpeg)](https://speakerdeck.com/ytyubox/property-wrapper-in-swift)
+[![](speakdeck.png)](https://speakerdeck.com/ytyubox/property-wrapper-in-swift)
 
 
 ## Table of content
