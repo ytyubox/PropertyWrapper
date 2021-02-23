@@ -1,0 +1,82 @@
+//
+/*
+ *        Created by 游宗諭 in 2021/2/20
+ *
+ *        Using Swift 5.0
+ *
+ *        Running on macOS 10.15
+ */
+
+@propertyWrapper class Atomic<Value> {
+    private let queue: DispatchQueue
+    private var value: Value
+
+    init(wrappedValue: Value, label: String = "Barrier") {
+        value = wrappedValue
+        queue = DispatchQueue(
+            label: label,
+            qos: .utility,
+            attributes: .concurrent,
+            autoreleaseFrequency: .inherit,
+            target: .global()
+        )
+    }
+
+    var wrappedValue: Value {
+        get { return queue.sync { value } }
+        set {
+            queue.async(flags: .barrier) {
+                self.value = newValue
+            }
+        }
+    }
+}
+
+import XCTest
+class BarrierTests: XCTestCase {
+    @Atomic var lockSingleValue = 0
+    func testLockValue() {
+        randomQueueAsync { _ in
+            self.lockSingleValue += 1
+        }
+        XCTAssertEqual(lockSingleValue, expect)
+    }
+
+    @Atomic var lockDic = [String: Int]()
+    func testLock() {
+        randomQueueAsync { index in
+            self.lockDic["item-\(index)"] = index
+        }
+        XCTAssertEqual(lockDic.count, expect)
+    }
+
+    @Atomic var lockList = [Int]()
+    func testLockArray() {
+        randomQueueAsync { index in
+            self.lockList.append(index)
+        }
+        XCTAssertEqual(lockList.count, expect)
+    }
+
+    // MARK: - help
+
+    var expect: Int { total }
+    let total = 100 // _000
+    func randomQueueAsync(action: @escaping (Int) -> Void) {
+        let queue = DispatchQueue(label: "")
+        let await = expectation(description: #function)
+        let g = DispatchGroup()
+
+        for index in 0 ..< total {
+            g.enter()
+            DispatchQueue.global().async {
+                action(index)
+                g.leave()
+            }
+        }
+        g.notify(queue: queue) {
+            await.fulfill()
+        }
+        wait(for: [await], timeout: 1.0)
+    }
+}
