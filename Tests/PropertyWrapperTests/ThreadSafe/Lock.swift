@@ -86,6 +86,7 @@ class ThreadSaveTests: XCTestCase {
         }
         wait(for: [await], timeout: 1)
         XCTAssertEqual(lockDicWithArray.count, total)
+        XCTAssertTrue(lockDicWithArray.values.allSatisfy{$0.count == total})
     }
 
     // MARK: - help

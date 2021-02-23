@@ -37,7 +37,8 @@ class BarrierTests: XCTestCase {
     @Atomic var lockSingleValue = 0
     func testLockValue() {
         randomQueueAsync { _ in
-            self.lockSingleValue += 1
+            let value = self.lockSingleValue
+            self.lockSingleValue = 1 + value
         }
         XCTAssertEqual(lockSingleValue, expect)
     }

@@ -32,15 +32,6 @@ final class NestedTests: XCTestCase {
 
 import SwiftUI
 
-struct Nested {
-    @State
-    @LoggingExcluded
-    var nest1 = 0
-
-    @LoggingExcluded
-    @State
-    var nest2 = 0
-}
 
 struct OrderDifferent {
     @LoggingExcluding

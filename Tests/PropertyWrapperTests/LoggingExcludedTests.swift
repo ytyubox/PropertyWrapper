@@ -11,6 +11,15 @@ import XCTest
 class Object {
     @LoggingExcluded
     var i = 0
+    /**
+     // uncomment to see compile failure 
+    @LoggingExcluded
+    weak var i2: NSObject?
+    @LoggingExcluded
+    unowned var i3: NSObject?
+    @LoggingExcluded
+    lazy var i4: NSObject?
+     */
 }
 
 class LogExcludeTests: XCTestCase {
