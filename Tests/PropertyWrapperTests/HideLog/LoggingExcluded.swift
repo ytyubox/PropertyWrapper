@@ -53,12 +53,3 @@
         return Mirror(reflecting: "--redacted--")
     }
 }
-
-extension LoggingExcluded: Projected
-    where Value: Projected
-{
-    public typealias ProjectedValue = Value.ProjectedValue
-    public var projectedValue: Value.ProjectedValue {
-        wrappedValue.projectedValue
-    }
-}

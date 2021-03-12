@@ -42,5 +42,3 @@ struct OrderDifferent {
     @LoggingExcluded
     var partialHidden = 0
 }
-
-extension State: Projected {}
